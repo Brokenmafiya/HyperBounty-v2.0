@@ -1,0 +1,18 @@
+#!/bin/bash
+# HyperBounty v2.0 Launcher Script
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Check if virtual environment exists
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+else
+    source venv/bin/activate
+fi
+
+# Run HyperBounty
+python3 hyperbounty_v2.py "$@"
