@@ -95,9 +95,8 @@ class ToolChecker:
             self.logger.warning(f"Missing {len(missing_tools)} tools:")
             for tool, cmd in missing_tools:
                 print(f"  {Colors.YELLOW}• {tool}{Colors.END}: {cmd}")
-
-            response = input(f"\n{Colors.CYAN}Continue anyway? (y/N): {Colors.END}")
-            return response.lower() == 'y'
+            print(f"\n{Colors.CYAN}💡 Most tools are installed! You can still run scans.{Colors.END}")
+            return False
         else:
             self.logger.success("All required tools are installed!")
             return True
@@ -657,7 +656,7 @@ class HyperBounty:
 
 def main():
     parser = argparse.ArgumentParser(description="HyperBounty v2.0 - Advanced Bug Bounty Platform")
-    parser.add_argument("-t", "--target", required=True, help="Target domain (e.g., example.com)")
+    parser.add_argument("-t", "--target", help="Target domain (e.g., example.com)")
     parser.add_argument("-o", "--output", help="Output directory (default: auto-generated)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
     parser.add_argument("--check-tools", action="store_true", help="Check required tools")
@@ -666,13 +665,15 @@ def main():
 
     hyperbounty = HyperBounty(verbose=args.verbose)
 
+    # Handle --check-tools without requiring target
     if args.check_tools:
         hyperbounty.tool_checker.check_all_tools()
         return
 
-    # Validate target
+    # Validate target for other operations
     if not args.target:
-        parser.error("Target domain is required")
+        parser.error("Target domain is required. Use -t example.com or --check-tools to verify setup.")
+        return
 
     # Run scan
     success = hyperbounty.run_comprehensive_scan(args.target, args.output)
