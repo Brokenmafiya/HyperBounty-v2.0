@@ -46,7 +46,7 @@ chmod +x install_hyperbounty.sh
 ./install_hyperbounty.sh
 
 # Verify installation
-hyperbounty --check-tools
+./hyperbounty.py --check-tools
 ```
 
 ### Usage
